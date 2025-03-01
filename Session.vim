@@ -13,13 +13,12 @@ if &shortmess =~ 'A'
 else
   set shortmess=aoO
 endif
-badd +24 src/main.rs
-badd +397 ~/.rustup/toolchains/stable-x86_64-pc-windows-msvc/lib/rustlib/src/rust/library/alloc/src/vec/mod.rs
+badd +8 ~/OneDrive/문서/PowerShell/Microsoft.PowerShell_profile.ps1
 argglobal
 %argdel
-edit src/main.rs
+$argadd ~/OneDrive/문서/PowerShell/Microsoft.PowerShell_profile.ps1
+edit ~/OneDrive/문서/PowerShell/Microsoft.PowerShell_profile.ps1
 argglobal
-balt ~/.rustup/toolchains/stable-x86_64-pc-windows-msvc/lib/rustlib/src/rust/library/alloc/src/vec/mod.rs
 setlocal fdm=manual
 setlocal fde=0
 setlocal fmr={{{,}}}
@@ -30,12 +29,12 @@ setlocal fdn=20
 setlocal fen
 silent! normal! zE
 let &fdl = &fdl
-let s:l = 24 - ((23 * winheight(0) + 25) / 51)
+let s:l = 8 - ((7 * winheight(0) + 14) / 28)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 24
-normal! 030|
+keepjumps 8
+normal! 0
 tabnext 1
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0 && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
   silent exe 'bwipe ' . s:wipebuf
