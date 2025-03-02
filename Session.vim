@@ -13,11 +13,11 @@ if &shortmess =~ 'A'
 else
   set shortmess=aoO
 endif
-badd +8 ~/OneDrive/문서/PowerShell/Microsoft.PowerShell_profile.ps1
+badd +2 src/main.rs
 argglobal
 %argdel
 $argadd ~/OneDrive/문서/PowerShell/Microsoft.PowerShell_profile.ps1
-edit ~/OneDrive/문서/PowerShell/Microsoft.PowerShell_profile.ps1
+edit src/main.rs
 argglobal
 setlocal fdm=manual
 setlocal fde=0
@@ -29,11 +29,11 @@ setlocal fdn=20
 setlocal fen
 silent! normal! zE
 let &fdl = &fdl
-let s:l = 8 - ((7 * winheight(0) + 14) / 28)
+let s:l = 2 - ((1 * winheight(0) + 14) / 29)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 8
+keepjumps 2
 normal! 0
 tabnext 1
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0 && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'

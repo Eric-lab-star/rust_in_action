@@ -1,16 +1,20 @@
-use std::ops::Add;
 
 
 
 
 fn main() {
-    let floats = add(1.2, 3.4);
-    let ints = add(10, 20);
-    println!("{}", floats);
-    println!("{}", ints);
-    
+    let search_term = "picture";
+    let quote = "\
+Every Face, every shop, bedroom window, public-house, and
+dark square is a picture feverishly turned--in search of what?
+It is the same with books.
+What do we seek throught millions of pages?";
+
+    for line in quote.lines() {
+        if line.contains(search_term) {
+            println!("{}", line);
+        }
+    }
 }
 
-fn add<T: Add<Output = T>>(i: T, j: T) -> T {
-    i + j
-}
+
