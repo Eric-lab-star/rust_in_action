@@ -13,12 +13,13 @@ if &shortmess =~ 'A'
 else
   set shortmess=aoO
 endif
-badd +2 src/main.rs
+badd +31 src/main.rs
+badd +1 ~/AppData/Local/nvim/lua/plugins/cmp.lua
 argglobal
 %argdel
-$argadd ~/OneDrive/문서/PowerShell/Microsoft.PowerShell_profile.ps1
 edit src/main.rs
 argglobal
+balt ~/AppData/Local/nvim/lua/plugins/cmp.lua
 setlocal fdm=manual
 setlocal fde=0
 setlocal fmr={{{,}}}
@@ -29,12 +30,12 @@ setlocal fdn=20
 setlocal fen
 silent! normal! zE
 let &fdl = &fdl
-let s:l = 2 - ((1 * winheight(0) + 14) / 29)
+let s:l = 31 - ((30 * winheight(0) + 27) / 54)
 if s:l < 1 | let s:l = 1 | endif
 keepjumps exe s:l
 normal! zt
-keepjumps 2
-normal! 0
+keepjumps 31
+normal! 051|
 tabnext 1
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0 && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
   silent exe 'bwipe ' . s:wipebuf
