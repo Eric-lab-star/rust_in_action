@@ -1,57 +1,36 @@
-#[derive(Debug)]
-struct CubeSat {
-    id: u64,
-    mailbox: Mailbox,
-}
+use std::{cell::RefCell, rc::Rc};
 
-impl CubeSat {
-    fn recv(&mut self) -> Option<Message> {
-        self.mailbox.messages.pop()
-    }
-}
 
 #[derive(Debug)]
-struct Mailbox {
-    messages: Vec<Message>,
+struct GroundStation {
+    radio_freq: f64,
 }
-
-type Message = String;
-
-#[derive(Debug)]
-enum StatusMessage {
-    Ok,
-}
-
-struct GroundStation;
-
-impl GroundStation {
-    fn send (
-        &self,
-        to: &mut CubeSat,
-        msg: Message,
-    ) {
-        to.mailbox.messages.push(msg);
-    }
-}
-
-
 
 
 fn main() {
-    let base = GroundStation {};
-    let mut sat_a = CubeSat {
-        id: 0,
-        mailbox: Mailbox {
-            messages: vec![],
-        },
-    };
-    
-    println!("t0: {:?}", sat_a);
-    
-    base.send(
-        &mut sat_a,
-        Message::from("hello there")
-    );
+    let base: Rc<RefCell<GroundStation>>
+        = Rc::new(
+            RefCell::new(
+                GroundStation {
+                    radio_freq: 87.65,
+                }
+            )
+        );
 
+    println!("base {:?}", base);
+
+    {
+        let mut base_2 = base.borrow_mut();
+        base_2.radio_freq -= 12.34;
+        println!("base_2: {:?}", base_2);
+    }
+
+    println!("base: {:?}", base);
+
+    let mut base_3 = base.borrow_mut();
+    base_3.radio_freq += 43.21;
+
+    println!("base {:?}", base);
+    println!("base_3 {:?}", base_3);
 
 }
