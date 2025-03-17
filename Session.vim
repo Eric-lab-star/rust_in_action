@@ -13,14 +13,14 @@ if &shortmess =~ 'A'
 else
   set shortmess=aoO
 endif
-badd +1 Session.vim
-badd +4 src/main.rs
+badd +33 src/main.rs
+badd +84 ~/AppData/Local/nvim/lua/plugins/luasnipet.lua
+badd +77 ~/AppData/Local/nvim/lua/config/lazy.lua
 argglobal
 %argdel
+edit src/main.rs
 argglobal
-enew
-file oil:///C/Users/cyon2/OneDrive/Documents/Programming/rust/rust_in_action/
-balt src/main.rs
+balt ~/AppData/Local/nvim/lua/config/lazy.lua
 setlocal fdm=manual
 setlocal fde=0
 setlocal fmr={{{,}}}
@@ -29,6 +29,14 @@ setlocal fdl=0
 setlocal fml=1
 setlocal fdn=20
 setlocal fen
+silent! normal! zE
+let &fdl = &fdl
+let s:l = 33 - ((32 * winheight(0) + 26) / 52)
+if s:l < 1 | let s:l = 1 | endif
+keepjumps exe s:l
+normal! zt
+keepjumps 33
+normal! 010|
 tabnext 1
 if exists('s:wipebuf') && len(win_findbuf(s:wipebuf)) == 0 && getbufvar(s:wipebuf, '&buftype') isnot# 'terminal'
   silent exe 'bwipe ' . s:wipebuf

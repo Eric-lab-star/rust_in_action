@@ -1,36 +1,62 @@
-use std::{cell::RefCell, rc::Rc};
+const BIAS: i32 = 127;
+const RADIX: f32 = 2.0;
 
+fn main() {
+let n: f32 = 42.42;
+    let (sign, exp, frac) = to_parts(n);
+    let (sign_, exp_, mant) = decode(sign, exp, frac);
+    let n_ = from_parts(sign_, exp_, mant);
 
-#[derive(Debug)]
-struct GroundStation {
-    radio_freq: f64,
+    println!("{} -> {}", n, n_);
+    println!("field | as bits | as real number");
+    println!("sign  |   {:01b} | {}", sign, sign);
+    println!("exponent | {:08b} | {}", sign, sign_);
+    println!("mantissa | {:023b} | {}" , frac, mant);
 }
 
 
-fn main() {
-    let base: Rc<RefCell<GroundStation>>
-        = Rc::new(
-            RefCell::new(
-                GroundStation {
-                    radio_freq: 87.65,
-                }
-            )
-        );
 
-    println!("base {:?}", base);
 
-    {
-        let mut base_2 = base.borrow_mut();
-        base_2.radio_freq -= 12.34;
-        println!("base_2: {:?}", base_2);
+
+fn to_parts(n: f32) -> (u32, u32, u32) {
+    let bits = n.to_bits();
+    let sign = (bits >> 31) & 1;
+    let exp = (bits >> 23) & 0xff;
+    let fraction = bits & 0x7fffff;
+
+    (sign, exp, fraction)
+}
+
+fn decode(
+    sign: u32,
+    exp: u32,
+    fraction: u32
+) -> (f32, f32, f32) {
+    let signed_1 = (-1.0_f32).powf(sign as f32);
+
+    let exponent = (exp as i32) - BIAS;
+    let exponent = RADIX.powf(exponent as f32);
+
+    let mut mantissa: f32 = 1.0;
+
+    for i in 0..23 {
+        let mask = 1 << i;
+        let one_at_bit_i = fraction & mask;
+        if one_at_bit_i != 0 {
+            let i_ = i as f32;
+            let weight = 2_f32.powf(i_ - 23.0);
+            mantissa += weight;
+        }
     }
 
-    println!("base: {:?}", base);
+    (signed_1, exponent, mantissa)
 
-    let mut base_3 = base.borrow_mut();
-    base_3.radio_freq += 43.21;
+}
 
-    println!("base {:?}", base);
-    println!("base_3 {:?}", base_3);
-
+fn from_parts(
+    sign: f32,
+    exponent: f32, 
+    mantissa: f32,
+) -> f32 {
+    sign * exponent * mantissa
 }
