@@ -1,15 +1,46 @@
+#[derive(Debug)]
+struct CPU {
+    current_operation: u16,
+    registers: [u8; 2],
+}
 
+impl CPU {
+    fn read_opcode(&self) -> u16 {
+        self.current_operation
+    }
 
-fn mock_rand(n: u8) -> f32 {
-    let base: u32 = 0b00111111_00000000_00000000_00000000;
-    let large_n: u32 = (n as u32) << 15;
-    let f32_bits = base | large_n;
-    let m = f32::from_bits(f32_bits);
-    2.0 * (m - 0.5)
+    fn run(&mut self) {
+        // loop {
+        let opcode = self.read_opcode();
+        let c = ((opcode & 0xF000) >> 12) as u8; 
+        let x = ((opcode & 0x0F00) >> 8) as u8; 
+        let y = ((opcode & 0x00F0) >> 4) as u8; 
+        let d = ((opcode & 0x000F) >> 0) as u8; 
+
+        match (c, x, y, d) {
+            (0x8, _, _, 0x4) => self.add_xy(x, y),
+            _ => println!("todo! {:04x}", opcode),
+        }
+        //}
+    }
+    
+    fn add_xy(&mut self, x: u8, y: u8) {
+        self.registers[x as usize] += self.registers[y as usize];
+    }
 }
 
 fn main() {
-    println!("{:08b} -> {:?}", 0xff, mock_rand(0xff));
-    println!("{:08b} -> {:?}", 0x7f, mock_rand(0x7f));
-    println!("{:08b} -> {:?}", 0x00, mock_rand(0x00));
+    let mut cpu = CPU {
+        current_operation: 0,
+        registers: [0; 2],
+    };
+
+    cpu.current_operation = 0x8014;
+    cpu.registers[0] = 5;
+    cpu.registers[1] = 10;
+    cpu.run();
+
+    assert_eq!(cpu.registers[0], 15);
+
+    println!("5 + 10 = {}", cpu.registers[0]);
 }
