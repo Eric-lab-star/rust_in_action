@@ -5,18 +5,16 @@ use winapi::{
     DWORD,
     HANDLE,
     LPVOID,
-    PVOID,
-    SIZE_T,
+    size_t,
     LPSYSTEM_INFO,
     SYSTEM_INFO,
     MEMORY_BASIC_INFORMATION as MEMINFO,
-};
+}
 
 fn main() {
     let this_pid: DWORD;
     let this_proc: HANDLE;
     let min_app_addr: LPVOID;
-    let max_app_addr: LPVOID;
     let mut base_addr: PVOID;
     let mut proc_info: SYSTEM_INFO;
     let mut mem_info: MEMINFO;
@@ -42,21 +40,5 @@ fn main() {
 
     println!("{:?} @ {:p}", this_pid, this_proc);
     println!("{:?}", proc_info);
-    println!("min: {:p}, max: {:p}", min_app_addr, max_app_addr);
-
-    loop {
-        let rc: SIZE_T = unsafe {
-            kernel32::VirtualQueryEx(
-                this_proc, base_addr, &mut mem_info, MEMINFO_SIZE as SIZE_T)
-        };
-
-        if rc == 0 {
-            break
-        }
-
-        println!("{:#?}", mem_info);
-        base_addr = ((base_addr as u64) + (mem_info.RegionSize)) as PVOID;
-    }
-
 
 }
