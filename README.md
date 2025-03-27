@@ -1,2 +1,0 @@
-# Be Powerful 
-# Be Positive
