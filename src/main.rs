@@ -2,7 +2,6 @@ use std::net::{SocketAddr, UdpSocket};
 use std::time::Duration;
 
 use clap::{App, Arg};
-use rand;
 use trust_dns::op::{ Message, MessageType, OpCode, Query};
 use trust_dns::rr::domain::Name;
 use trust_dns::rr::record_type::RecordType;
@@ -18,7 +17,7 @@ fn main() {
     let domain_name_raw =
         app.value_of("domain-name").unwrap();
     let domain_name = 
-        Name::from_ascii(&domain_name_raw).unwrap();
+        Name::from_ascii(domain_name_raw).unwrap();
     let dns_server_raw =
         app.value_of("dns-server").unwrap();
     let dns_server: SocketAddr = 
@@ -67,7 +66,7 @@ fn main() {
             let ip = resource
                 .to_ip_addr()
                 .expect("invalid IP address received");
-            println!("{}",ip.to_string());
+            println!("{}",ip);
         }
 
     }
